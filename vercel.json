@@ -1,8 +1,11 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist/public",
-  "framework": "vite",
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
