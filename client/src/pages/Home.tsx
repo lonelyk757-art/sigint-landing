@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, AlertTriangle, Radio, Zap } from "lucide-react";
+import { ArrowRight, AlertTriangle, Radio, Zap, ChevronDown } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useEffect, useState } from "react";
 
 /**
@@ -17,10 +18,44 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
+  const [openFaq, setOpenFaq] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  const faqs = [
+    {
+      id: "faq-1",
+      question: "What is SIGINT ✓?",
+      answer: "SIGINT ✓ is a curated security intelligence channel that delivers the most relevant hacker news stories, critical CVE alerts, and security exploits. We filter out the noise and deliver only what matters to the security community."
+    },
+    {
+      id: "faq-2",
+      question: "How often do you post updates?",
+      answer: "We post curated updates multiple times daily, whenever there are significant security developments, critical CVEs, or trending stories in the hacker community. Our goal is to keep you informed without overwhelming your inbox."
+    },
+    {
+      id: "faq-3",
+      question: "Is this channel free?",
+      answer: "Yes! SIGINT ✓ is completely free. We believe in democratizing security intelligence. Just join our WhatsApp channel and start receiving curated updates immediately."
+    },
+    {
+      id: "faq-4",
+      question: "What kind of content do you share?",
+      answer: "We share top stories from Hacker News, critical CVE alerts with exploit information, security research, vulnerability disclosures, and tech news relevant to developers and security professionals. Everything is filtered for signal, not noise."
+    },
+    {
+      id: "faq-5",
+      question: "How do I join the channel?",
+      answer: "Simply click the 'Subscribe on WhatsApp' button on this page. It will take you directly to our WhatsApp channel where you can join with one click. No registration or personal information required."
+    },
+    {
+      id: "faq-6",
+      question: "Can I share content from SIGINT ✓?",
+      answer: "Absolutely! We encourage you to share SIGINT ✓ updates with your network. Help spread the signal and build a community of informed security professionals."
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
@@ -210,6 +245,58 @@ export default function Home() {
       >
         <path
           d="M0,50 Q300,100 600,50 T1200,50 L1200,0 L0,0 Z"
+          fill="currentColor"
+        />
+      </svg>
+
+      {/* FAQ Section */}
+      <section className="bg-dark-secondary py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16"
+            style={{
+              color: "#00FF41",
+              textShadow: "0 0 15px rgba(0, 255, 65, 0.3)",
+            }}
+          >
+            Frequently Asked Questions
+          </h2>
+
+          <Accordion type="single" collapsible value={openFaq} onValueChange={setOpenFaq}>
+            {faqs.map((faq) => (
+              <AccordionItem
+                key={faq.id}
+                value={faq.id}
+                className="border-b border-border mb-2 last:border-b-0"
+              >
+                <AccordionTrigger
+                  className="py-4 px-6 rounded-lg hover:bg-card/50 transition-colors group"
+                  style={{
+                    color: "#F0F0F0",
+                  }}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-lg font-semibold text-left">{faq.question}</span>
+                    <ChevronDown className="h-5 w-5 text-neon-green group-data-[state=open]:rotate-180 transition-transform" />
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-4 text-muted-foreground text-lg leading-relaxed">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </section>
+
+      {/* Diagonal Divider 3 */}
+      <svg
+        className="w-full h-24 text-dark-secondary"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z"
           fill="currentColor"
         />
       </svg>
