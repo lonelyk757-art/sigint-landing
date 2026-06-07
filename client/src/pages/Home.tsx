@@ -47,6 +47,37 @@ function useCountUp(target: number, duration: number = 2000, shouldStart: boolea
   return count;
 }
 
+// Live Clock Component
+function LiveClock() {
+  const [time, setTime] = useState<string>('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const formattedTime = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+        timeZone: 'UTC'
+      });
+      setTime(formattedTime);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700 hover:border-cyan-500 transition-colors">
+      <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+      <span className="text-sm font-mono text-cyan-400 font-semibold">{time || '--:--:-- --'}</span>
+      <span className="text-xs text-slate-500">UTC</span>
+    </div>
+  );
+}
+
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [openFaq, setOpenFaq] = useState<string | undefined>(undefined);
@@ -192,6 +223,7 @@ export default function Home() {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <LiveClock />
             <a href="tel:+18252023756" className="text-slate-400 hover:text-cyan-400 transition flex items-center gap-2">
               <Phone className="w-4 h-4" />
               <span className="text-sm">+1 (825) 202-3756</span>
