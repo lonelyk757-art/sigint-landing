@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, AlertTriangle, Radio, Zap, ChevronDown, Share2, TrendingUp, Users, Shield, Lock, Eye, Zap as ZapIcon } from "lucide-react";
+import { ArrowRight, AlertTriangle, Radio, Zap, ChevronDown, Share2, TrendingUp, Users, Shield, Lock, Eye, Phone, Mail } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useEffect, useState, useRef } from "react";
 
@@ -191,18 +191,24 @@ export default function Home() {
               <p className="text-xs text-slate-400">Security Intelligence</p>
             </div>
           </div>
-          <a
-            href="https://whatsapp.com/channel/0029VbCmZq4LNSaDBuWKZ93x"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button
-              size="sm"
-              className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold"
+          <div className="flex items-center gap-4">
+            <a href="tel:+18252023756" className="text-slate-400 hover:text-cyan-400 transition flex items-center gap-2">
+              <Phone className="w-4 h-4" />
+              <span className="text-sm">+1 (825) 202-3756</span>
+            </a>
+            <a
+              href="https://whatsapp.com/channel/0029VbCmZq4LNSaDBuWKZ93x"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Subscribe Now
-            </Button>
-          </a>
+              <Button
+                size="sm"
+                className="bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold"
+              >
+                Subscribe Now
+              </Button>
+            </a>
+          </div>
         </div>
       </header>
 
@@ -450,6 +456,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Contact Section */}
+      <section className="py-20 px-6 bg-slate-900/50">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-4 text-white">
+            Get in Touch
+          </h2>
+          <p className="text-center text-slate-400 mb-12">
+            Have questions? Contact us directly or reach out through WhatsApp
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="p-8 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500 transition-all">
+              <Phone className="w-12 h-12 text-cyan-400 mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
+              <a href="tel:+18252023756" className="text-slate-400 hover:text-cyan-400 transition text-lg font-semibold">
+                +1 (825) 202-3756
+              </a>
+              <p className="text-slate-500 text-sm mt-2">Call us for immediate assistance</p>
+            </div>
+
+            <div className="p-8 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-cyan-500 transition-all">
+              <Shield className="w-12 h-12 text-cyan-400 mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">WhatsApp Channel</h3>
+              <a href="https://whatsapp.com/channel/0029VbCmZq4LNSaDBuWKZ93x" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-cyan-400 transition text-lg font-semibold">
+                Join Channel
+              </a>
+              <p className="text-slate-500 text-sm mt-2">Real-time threat intelligence updates</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-24 px-6 bg-gradient-to-r from-cyan-600 to-cyan-500">
         <div className="max-w-4xl mx-auto text-center">
@@ -485,6 +523,12 @@ export default function Home() {
               <p className="text-sm">
                 Modern security intelligence platform for enterprises and security professionals.
               </p>
+              <div className="mt-4 pt-4 border-t border-slate-800">
+                <p className="text-xs text-slate-500 mb-2">Contact:</p>
+                <a href="tel:+18252023756" className="text-cyan-400 hover:text-cyan-300 transition font-semibold text-sm">
+                  +1 (825) 202-3756
+                </a>
+              </div>
             </div>
             <div>
               <h3 className="text-white font-bold mb-4">Platform</h3>
@@ -513,6 +557,14 @@ export default function Home() {
                     className="hover:text-white transition"
                   >
                     WhatsApp Channel
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="tel:+18252023756"
+                    className="hover:text-cyan-400 transition"
+                  >
+                    Phone Support
                   </a>
                 </li>
               </ul>
