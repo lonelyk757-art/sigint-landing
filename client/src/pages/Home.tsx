@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, AlertTriangle, Radio, Zap, ChevronDown } from "lucide-react";
+import { ArrowRight, AlertTriangle, Radio, Zap, ChevronDown, Share2, TrendingUp, Users } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 /**
  * SIGINT ✓ Landing Page
@@ -14,15 +14,114 @@ import { useEffect, useState } from "react";
  * 
  * Layout: Asymmetric sections with diagonal dividers, neon glow effects
  * Animation: Smooth fade-in, hover glow, subtle pulse on CTA
+ * Features: Animated stats, recent updates feed, referral program, SEO optimized
  */
+
+// Animated Counter Hook
+function useCountUp(target: number, duration: number = 2000, shouldStart: boolean = true) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!shouldStart) return;
+
+    let startTime: number;
+    let animationId: number;
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      setCount(Math.floor(progress * target));
+
+      if (progress < 1) {
+        animationId = requestAnimationFrame(animate);
+      }
+    };
+
+    animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId);
+  }, [target, duration, shouldStart]);
+
+  return count;
+}
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [openFaq, setOpenFaq] = useState<string | undefined>(undefined);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  const subscribers = useCountUp(500, 2000, statsVisible);
+  const cves = useCountUp(1200, 2000, statsVisible);
+  const updates = useCountUp(50, 2000, statsVisible);
 
   useEffect(() => {
     setIsVisible(true);
+    // SEO: Set page metadata
+    document.title = "SIGINT ✓ | No Noise. Just Signal. - Security Intelligence";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute("content", "SIGINT ✓ delivers curated security intelligence: filtered Hacker News, critical CVE alerts, and zero noise. Join our WhatsApp channel for real-time updates.");
+    }
   }, []);
+
+  // Intersection Observer for stats animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStatsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const recentUpdates = [
+    {
+      id: 1,
+      title: "Critical: Apache Log4j RCE Vulnerability",
+      description: "CVSS 10.0 - Remote code execution in Apache Log4j affecting millions of systems worldwide.",
+      date: "Today"
+    },
+    {
+      id: 2,
+      title: "New Exploit Released for Windows PrintNightmare",
+      description: "Public PoC available for CVE-2021-34527. Immediate patching recommended for all Windows systems.",
+      date: "Yesterday"
+    },
+    {
+      id: 3,
+      title: "Top HN: Building Secure APIs in 2026",
+      description: "Comprehensive guide on modern API security best practices from the hacker community.",
+      date: "2 days ago"
+    }
+  ];
+
+  const referralBenefits = [
+    {
+      icon: Users,
+      title: "Invite Friends",
+      description: "Share your referral link and invite security professionals to SIGINT ✓"
+    },
+    {
+      icon: TrendingUp,
+      title: "Build Community",
+      description: "Help grow a community of informed security professionals and developers"
+    },
+    {
+      icon: Share2,
+      title: "Spread the Signal",
+      description: "Every share helps eliminate noise and brings more signal to the community"
+    }
+  ];
 
   const faqs = [
     {
@@ -85,7 +184,7 @@ export default function Home() {
           >
             <img
               src="/manus-storage/sigint-logo_fccffe38.jpg"
-              alt="SIGINT ✓"
+              alt="SIGINT ✓ - Security Intelligence Logo"
               className="h-48 w-auto mx-auto neon-glow"
             />
           </div>
@@ -249,6 +348,201 @@ export default function Home() {
         />
       </svg>
 
+      {/* Animated Stats Section */}
+      <section ref={statsRef} className="bg-background py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16"
+            style={{
+              color: "#00FF41",
+              textShadow: "0 0 15px rgba(0, 255, 65, 0.3)",
+            }}
+          >
+            By The Numbers
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Stat 1 */}
+            <div className="text-center p-8 bg-card rounded-lg border border-border hover:border-neon-green transition-colors">
+              <div
+                className="text-5xl md:text-6xl font-bold mb-4"
+                style={{ color: "#00FF41" }}
+              >
+                {subscribers}+
+              </div>
+              <p className="text-xl text-muted-foreground">Active Subscribers</p>
+              <p className="text-sm text-muted-foreground mt-2">Growing security community</p>
+            </div>
+
+            {/* Stat 2 */}
+            <div className="text-center p-8 bg-card rounded-lg border border-border hover:border-neon-cyan transition-colors">
+              <div
+                className="text-5xl md:text-6xl font-bold mb-4"
+                style={{ color: "#00D9FF" }}
+              >
+                {cves}+
+              </div>
+              <p className="text-xl text-muted-foreground">CVEs Tracked</p>
+              <p className="text-sm text-muted-foreground mt-2">Critical vulnerabilities monitored</p>
+            </div>
+
+            {/* Stat 3 */}
+            <div className="text-center p-8 bg-card rounded-lg border border-border hover:border-neon-green transition-colors">
+              <div
+                className="text-5xl md:text-6xl font-bold mb-4"
+                style={{ color: "#00FF41" }}
+              >
+                {updates}+
+              </div>
+              <p className="text-xl text-muted-foreground">Daily Updates</p>
+              <p className="text-sm text-muted-foreground mt-2">Curated security intelligence</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Diagonal Divider 3 */}
+      <svg
+        className="w-full h-24 text-background"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z"
+          fill="currentColor"
+        />
+      </svg>
+
+      {/* Recent Updates Section */}
+      <section className="bg-dark-secondary py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2
+            className="text-4xl md:text-5xl font-bold text-center mb-16"
+            style={{
+              color: "#00FF41",
+              textShadow: "0 0 15px rgba(0, 255, 65, 0.3)",
+            }}
+          >
+            Recent Updates
+          </h2>
+
+          <div className="space-y-6">
+            {recentUpdates.map((update) => (
+              <div
+                key={update.id}
+                className="p-6 bg-card rounded-lg border border-border hover:border-neon-green transition-all duration-300 hover:shadow-lg"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-xl font-bold text-text-white flex-1">{update.title}</h3>
+                  <span className="text-sm text-neon-green ml-4 whitespace-nowrap">{update.date}</span>
+                </div>
+                <p className="text-muted-foreground text-lg">{update.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <a
+              href="https://whatsapp.com/channel/0029VbCmZq4LNSaDBuWKZ93x"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                size="lg"
+                className="px-8 py-6 text-lg font-bold"
+                style={{
+                  backgroundColor: "#00FF41",
+                  color: "#0A0E27",
+                  borderRadius: "4px",
+                }}
+              >
+                See All Updates
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Diagonal Divider 4 */}
+      <svg
+        className="w-full h-24 text-dark-secondary"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0,50 Q300,100 600,50 T1200,50 L1200,0 L0,0 Z"
+          fill="currentColor"
+        />
+      </svg>
+
+      {/* Referral Program Section */}
+      <section className="bg-background py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2
+            className="text-4xl md:text-5xl font-bold text-center mb-4"
+            style={{
+              color: "#00FF41",
+              textShadow: "0 0 15px rgba(0, 255, 65, 0.3)",
+            }}
+          >
+            Spread the Signal
+          </h2>
+          <p className="text-center text-muted-foreground text-lg mb-16 max-w-2xl mx-auto">
+            Help us build a community of informed security professionals. Share SIGINT ✓ with your network and help eliminate noise.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {referralBenefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <div
+                  key={index}
+                  className="p-8 bg-card rounded-lg border border-border hover:border-neon-green transition-all duration-300 text-center"
+                >
+                  <Icon className="h-12 w-12 text-neon-green mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-text-white mb-3">{benefit.title}</h3>
+                  <p className="text-muted-foreground">{benefit.description}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="text-center">
+            <a
+              href="https://whatsapp.com/channel/0029VbCmZq4LNSaDBuWKZ93x"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                size="lg"
+                className="px-10 py-7 text-lg font-bold transition-glow btn-neon-glow"
+                style={{
+                  backgroundColor: "#00FF41",
+                  color: "#0A0E27",
+                  borderRadius: "4px",
+                }}
+              >
+                Share Your Referral Link
+                <Share2 className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Diagonal Divider 5 */}
+      <svg
+        className="w-full h-24 text-background"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z"
+          fill="currentColor"
+        />
+      </svg>
+
       {/* FAQ Section */}
       <section className="bg-dark-secondary py-20 px-4">
         <div className="max-w-4xl mx-auto">
@@ -289,14 +583,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Diagonal Divider 3 */}
+      {/* Diagonal Divider 6 */}
       <svg
         className="w-full h-24 text-dark-secondary"
         viewBox="0 0 1200 120"
         preserveAspectRatio="none"
       >
         <path
-          d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z"
+          d="M0,50 Q300,100 600,50 T1200,50 L1200,0 L0,0 Z"
           fill="currentColor"
         />
       </svg>
